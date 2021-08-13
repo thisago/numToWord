@@ -1,6 +1,6 @@
 #[
   Created at: 08/12/2021 15:04:05 Thursday
-  Modified at: 08/12/2021 07:27:59 PM Thursday
+  Modified at: 08/13/2021 02:41:05 AM Friday
 ]#
 
 ##[
@@ -9,7 +9,7 @@
 
   Converts numbers to words
 
-  Implementation of https://github.com/marlun78/number-to-words/blob/master/src/toWords.js
+  Improved implementation of https://github.com/marlun78/number-to-words/blob/master/src/toWords.js
 ]##
 
 {.experimental: "codeReordering".}
@@ -39,15 +39,14 @@ const
   lessThanTwenty = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten","eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
   tenthsLessThanHundred = ["zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
   moreThanTenths = ["hundred", "thousand", "million", "billion", "trillion", "quadrillion"]
+  minus = "minus"
 
-proc toWords*(number: int; asOrdinal = false): string =
-  var words: seq[string]
-
+proc toWord*(number: int): string =
+  ## Converts the given `number` to string
+  ## TODO: Ordinal implementation like JS one
   if number > max:
     return $number
-
   result = generateWords(number)
-  # return asOrdinal ? makeOrdinal(words) : words
 
 proc generateWords(number: int; words = newSeq[string]()): string =
   var
@@ -55,20 +54,17 @@ proc generateWords(number: int; words = newSeq[string]()): string =
     word: string
     number = number
     words = words
-
   if number == 0:
-    result = if words.len == 0: "zero" else: words.join(" ")
+    result = if words.len == 0: lessThanTwenty[0] else: words.join(" ")
     if result[^1] == ',':
       result = result[0..^1]
     return result
   if number < 0:
-    words.add("minus")
+    words.add minus
     number = abs(number)
-
   if number < 20:
     remainder = 0
     word = lessThanTwenty[number]
-
   elif number < values[ord(Hundred)]:
     remainder = number mod ten
     word = tenthsLessThanHundred[floor(number / ten).int]
@@ -80,7 +76,7 @@ proc generateWords(number: int; words = newSeq[string]()): string =
       let value = values[i]
       if number < values[i + 1]:
         remainder = number mod value
-        word = generateWords(floor(number / value).int) & " " & moreThanTenths[i + 1] & ","
+        word = generateWords(floor(number / value).int) & " " & moreThanTenths[i] & ","
         break
 
   words.add word
@@ -88,12 +84,15 @@ proc generateWords(number: int; words = newSeq[string]()): string =
 
 
 when isMainModule:
-  echo 1.toWords
-  echo 10.toWords
-  echo 14.toWords
-  echo 21.toWords
-  echo 51.toWords
-  echo 58.toWords
-  echo 101.toWords
-  echo 131.toWords
-  echo 1131.toWords
+  echo 0.toWord
+  echo 1.toWord
+  echo 10.toWord
+  echo 14.toWord
+  echo 21.toWord
+  echo 51.toWord
+  echo 58.toWord
+  echo 101.toWord
+  echo 131.toWord
+  echo 1131.toWord
+  echo 123456.toWord
+  echo 114564531.toWord
