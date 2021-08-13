@@ -1,2 +1,2 @@
-toWords	numToWord.html#toWords,int	numToWord: toWords(number: int): string	
+toWord	numToWord.html#toWord,int	numToWord: toWord(number: int): string	
 num Word	numToWord.html#num-word	 num Word	
